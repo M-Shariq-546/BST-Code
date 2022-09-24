@@ -2,109 +2,121 @@
 using namespace std;
 class Node
 {
-    Node * left;
-    Node * right;
     int data;
+    Node* left;
+    Node* right;
     public:
-        Node(int data)
+        Node(int data=-9999 , Node*right = NULL , Node* left = NULL)
         {
-            right = left = NULL;
-            data = this->data;
+            setData(data);
+            setRight(right);
+            setLeft(left);
         }
         void setData(int data)
         {
-            data = this->data;
+           this->data = data;
         }
         int getData()
         {
-            return this->data;
+            return data;
         }
         void setLeft(Node * left)
         {
-            left = this->left;
+             this->left = left;
         }
         Node* getLeft()
         {
-            return this->left;
+            return left;
         }
         void setRight(Node * right)
         {
-            right = this->right;
+            this->right = right;
         }
         Node* getRight()
         {
-            return this->right;
+            return right;
         }
 };
 
-
+//Binary Search Tree Class
 
 class BST
 {
     Node * root;
     public:
-        bool isEmpty(Node * root)
+        void setRoot(Node* root)
+        {
+            this->root = root;
+        }
+        Node *getRoot()
+        {
+            return root;
+        }
+        BST(Node* root = NULL)
+        {
+            setRoot(root);
+        }
+        bool isEmpty()
         {
             return (root == NULL);
         }
 
-        bool isFull(Node* root)
-        {
-            if(root->getLeft() && root->getRight())
-            {
-                return true;
-            }
-            if((root->getRight())&& (root->getLeft()))
-            {
-                return (isFull(root->getLeft())&&isFull(root->getRight()));
-            }
-
-            return false;
-        }
-        Node * getRoot(Node *root)
-        {
-            return root;
-        }
-        Node * getRightChild(Node * root)
-        {
-            return root->getRight();
-        }
-        Node * getLeftChild(Node * root){
-            return root->getLeft();
-        }
         void visitRoot(Node * root)
         {
             cout<<root->getData();
         }
-        void preOrder(Node * root)
+        void preOrder(Node * now)
         {
-            if(root == NULL)
+            if(now == NULL)
                 return;
-        visitRoot(root);
-        preOrder(root->getLeft());
-        preOrder(root->getRight());
+        visitRoot(now);
+        preOrder(now->getLeft());
+        preOrder(now->getRight());
         }
 
 
-        void inOrder(Node * root)
+        void inOrder(Node * now)
         {
-            if(root == NULL)
+            if(now == NULL)
                 return;
-        inOrder(root->getLeft());
-        visitRoot(root);
-        inOrder(root->getRight());
+        inOrder(now->getLeft());
+        visitRoot(now);
+        inOrder(now->getRight());
         }
 
 
-        void postOrder(Node * root)
+        void postOrder(Node * now)
         {
-            if(root == NULL)
+            if(now == NULL)
                 return;
-        postOrder(root->getLeft());
-        postOrder(root->getRight());
-        visitRoot(root);
+        postOrder(now->getLeft());
+        postOrder(now->getRight());
+        visitRoot(now);
         }
 
+
+        //Functions of Pre , In and Post order to display the elements of tree
+
+        void preOrder()
+        {
+            cout<<"Pre-Order Traversal is here : ";
+            preOrder(root);
+            cout<<"\n";
+        }
+
+        void inOrder()
+        {
+            cout<<"In-Order Traversal is here : ";
+            inOrder(root);
+            cout<<"\n";
+        }
+
+        void postOrder()
+        {
+            cout<<"Post-Order Traversal is here : ";
+            postOrder(root);
+            cout<<"\n";
+        }
 
         void printAll()
         {
@@ -112,24 +124,46 @@ class BST
         }
 
 
-        void insertVal(int x , Node * root)
+        void insertVal(int x)
         {
-            Node *temp = root;
-            Node * A = new Node(x);
-            if(x <= temp->getData())
+            Node * temp = new Node(x);
+            if(isEmpty())
             {
-                insertVal(x, temp->getLeft());
+                root = temp;
+                return;
             }
-            else{
-                insertVal(x , temp->getRight());
+            Node * now = root;
+            while(true)
+            {
+                if(x > now->getData())
+                {
+                    if(now->getRight() == NULL)
+                    {
+                        now->setRight(temp);
+                        return;
+                    }
+                    now = now->getRight();
+                }
+
+                else{
+                    if(x < now->getData())
+                    {
+                        if(now->getLeft() == NULL)
+                    {
+                        now->setLeft(temp);
+                        return;
+                    }
+                    now = now->getLeft();
+                    }
+                }
             }
         }
 
 
         //Childless Element
-        bool isLeaf(Node* root)
+        bool isLeaf(Node* now)
         {
-            if(root->getLeft()==NULL&& root->getRight()==NULL)
+            if(now->getLeft()==NULL&& now->getRight()==NULL)
             {
                 return true;
             }
@@ -139,9 +173,9 @@ class BST
 
 
         //Leaf Nodes ???
-        bool isExternal(Node* root)
+        bool isExternal(Node* now)
         {
-            if(isLeaf(root)==true)
+            if(isLeaf(now)==false)
             {
                 return true;
             }
@@ -149,16 +183,10 @@ class BST
             return false;
         }
 
-        //Having Atleast 1 child
-        bool isInternal(Node* root)
-        {
-            return !isLeaf(root);
-        }
-
         //Parent or Not
-        bool isFullParent(Node* root)
+        bool isFullParent(Node* now)
         {
-            if(root->getLeft()!=NULL&&root->getRight()!=NULL)
+            if(now->getLeft()!=NULL && now->getRight()!=NULL)
             {
                 return true;
             }
@@ -168,9 +196,9 @@ class BST
 
 
         //Single Parent??
-        bool isSingleParent(Node* root)
+        bool isSingleParent(Node* now)
         {
-            if(!isLeaf(root)&&!isFull(root))
+            if(!isLeaf(now))
             {
                 return true;
             }
@@ -180,77 +208,77 @@ class BST
 
 
         //Eldest Child of Family
-        int LargestElement(Node* root)
+        int LargestElement(Node* now)
         {
-            LargestElement(root->getRight());
-            if(root->getRight()==NULL)
+            LargestElement(now->getRight());
+            if(now->getRight()==NULL)
             {
-                return root->getData();
+                return now->getData();
             }
         }
 
 
         //Choota Packet of Family
-        int LowestElement(Node* root)
+        int LowestElement(Node* now)
         {
-            if(root->getLeft()==NULL)
+            if(now->getLeft()==NULL)
             {
-                return root->getData();
+                return now->getData();
             }
-            LowestElement(root->getRight());
+            LowestElement(now->getRight());
         }
 
         //Next Generation
-        int Successor(Node* root)
+        int Successor(Node* now)
         {
-            return LowestElement(root->getRight());
+            return LowestElement(now->getRight());
         }
 
         //Bhara Buzurg of Family
-        int Predeccessor(Node* root)
+        int Predeccessor(Node* now)
         {
-            return LargestElement(root->getLeft());
+            return LargestElement(now->getLeft());
         }
 
-        void deleteElement(Node* root,int x)
+        void deleteElement(Node* now,int x)
         {
-            if(root==NULL)
+            if(now==NULL)
             return;
             
             
-            if(x<root->getData())
-            deleteElement(root->getLeft(),x);
+            if(x<now->getData())
+            deleteElement(now->getLeft(),x);
             
             
-            else if(x>root->getData())
-            deleteElement(root->getRight(),x);
+            else if(x>now->getData())
+            deleteElement(now->getRight(),x);
 
             else
             {
-                if(root->getLeft()==NULL && root->getRight()==NULL)
+                if(now->getLeft()==NULL && now->getRight()==NULL)
                 {
-                    delete root;
-                    root=NULL;
+                    delete now;
+                    now=NULL;
                     return;
                 }
-                else if(root->getLeft() == NULL)
+                else if(now->getLeft() == NULL)
                 {
-                    Node* temp=root->getRight();
-                    delete root;
-                    root=temp;
+                    Node* temp=now->getRight();
+                    delete now;
+                    now=temp;
                     return;
                 }
-                else if(root->getRight() == NULL)
+                else if(now->getRight() == NULL)
                 {
-                    Node* temp=root->getLeft();
-                    delete root;
-                    root=temp;
+                    Node* temp=now->getLeft();
+                    delete now;
+                    now=temp;
                     return;
                 }
                 Node* temp1;
                 //temp1 = LowestElement(root->getRight());
                 //root->getData() = temp1->getData();
-                deleteElement(root->getRight(),temp1->getData());
+                deleteElement(now->getRight(),temp1->getData());
             }
             return;
         }
@@ -260,14 +288,24 @@ class BST
 
 int main()
 {
-    BST s;
-    Node* root=NULL;
-    s.insertVal(1, root);
-    s.insertVal(2, root);
-    s.insertVal(3, root);
-    s.insertVal(4, root);
+    BST s , s1;
+    s.insertVal(1);
+    s.insertVal(2);
+    s.insertVal(3);
+    s.insertVal(4);
     
-    s.isFullParent(root);
+
+    s.postOrder();
+    s.inOrder();
+    s.preOrder();
+
+
+    s1.insertVal(71);
+    s1.insertVal(72);
+    s1.insertVal(73);
+    s1.insertVal(74);
+
+    //s1.isFullParent(root);
     
     return 0;
 }
