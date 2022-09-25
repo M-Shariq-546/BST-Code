@@ -97,21 +97,21 @@ class BST
 
         //Functions of Pre , In and Post order to display the elements of tree
 
-        void preOrder()
+        void preOrderTraversal()
         {
             cout<<"Pre-Order Traversal is here : ";
             preOrder(root);
             cout<<"\n";
         }
 
-        void inOrder()
+        void inOrderTraversal()
         {
             cout<<"In-Order Traversal is here : ";
             inOrder(root);
             cout<<"\n";
         }
 
-        void postOrder()
+        void postOrderTraversal()
         {
             cout<<"Post-Order Traversal is here : ";
             postOrder(root);
@@ -163,12 +163,7 @@ class BST
         //Childless Element
         bool isLeaf(Node* now)
         {
-            if(now->getLeft()==NULL&& now->getRight()==NULL)
-            {
-                return true;
-            }
-            else
-            return false;
+            return (now->getLeft()==NULL&& now->getRight()==NULL);
         }
 
 
@@ -282,6 +277,27 @@ class BST
             }
             return;
         }
+
+        bool doesExist(int x)
+        {
+            Node * now = root;
+            while(now != NULL)
+            {
+                if(x < now->getData())
+                {
+                    now = now->getLeft();
+                }
+                else if(x > now->getData())
+                {
+                    now = now->getRight();
+                }
+                else{
+                    return true;
+                }
+            }
+            return false;
+        }
+
 };
 
 
@@ -290,22 +306,42 @@ int main()
 {
     BST s , s1;
     s.insertVal(1);
+    s.insertVal(52);
+    s.insertVal(8);
+    s.insertVal(12);
     s.insertVal(2);
     s.insertVal(3);
     s.insertVal(4);
     
+    s.visitRoot(NULL);
 
-    s.postOrder();
-    s.inOrder();
-    s.preOrder();
+
+    //s.Predeccessor(s.insertVal(4));
+
+    cout<<"First Tree Info : "<<endl;
+
+    s.postOrderTraversal();
+    s.inOrderTraversal();
+    s.preOrderTraversal();
+
+
 
 
     s1.insertVal(71);
     s1.insertVal(72);
-    s1.insertVal(73);
+    s1.insertVal(52);
+    s1.insertVal(54);
+    s1.insertVal(50);
+    s1.insertVal(42);
     s1.insertVal(74);
 
-    //s1.isFullParent(root);
+
+    cout<<"Second Tree Info : "<<endl;
+
+    s1.postOrderTraversal();
+    s1.inOrderTraversal();
+    s1.preOrderTraversal();
+
     
     return 0;
 }
