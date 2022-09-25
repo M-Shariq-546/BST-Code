@@ -316,8 +316,6 @@ int main()
     s.visitRoot(NULL);
 
 
-    //s.Predeccessor(s.insertVal(4));
-
     cout<<"First Tree Info : "<<endl;
 
     s.postOrderTraversal();
