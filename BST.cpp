@@ -6,7 +6,8 @@ class Node
     Node* left;
     Node* right;
     public:
-        Node(int data=-9999 , Node*right = NULL , Node* left = NULL)
+        //Node Constructor to initialize the values
+        Node(int data=-1 , Node*right = NULL , Node* left = NULL)
         {
             setData(data);
             setRight(right);
@@ -39,7 +40,6 @@ class Node
 };
 
 //Binary Search Tree Class
-
 class BST
 {
     Node * root;
@@ -60,11 +60,12 @@ class BST
         {
             return (root == NULL);
         }
-
         void visitRoot(Node * root)
         {
             cout<<root->getData();
         }
+
+        //Recursion occurs here
         void preOrder(Node * now)
         {
             if(now == NULL)
@@ -75,6 +76,7 @@ class BST
         }
 
 
+        //Recursion occurs here
         void inOrder(Node * now)
         {
             if(now == NULL)
@@ -84,7 +86,7 @@ class BST
         inOrder(now->getRight());
         }
 
-
+        //Recursion occurs here
         void postOrder(Node * now)
         {
             if(now == NULL)
@@ -94,12 +96,12 @@ class BST
         visitRoot(now);
         }
 
-
         //Functions of Pre , In and Post order to display the elements of tree
 
         void preOrderTraversal()
         {
             cout<<"Pre-Order Traversal is here : ";
+            //Recursion initiated here and start the traversal
             preOrder(root);
             cout<<"\n";
         }
@@ -107,6 +109,7 @@ class BST
         void inOrderTraversal()
         {
             cout<<"In-Order Traversal is here : ";
+            //Recursion initiated here and start the traversal
             inOrder(root);
             cout<<"\n";
         }
@@ -114,17 +117,18 @@ class BST
         void postOrderTraversal()
         {
             cout<<"Post-Order Traversal is here : ";
+            //Recursion initiated here and start the traversal
             postOrder(root);
             cout<<"\n";
         }
-
+        //Sab Hazir hon.....
         void printAll()
         {
             inOrder(root);
         }
 
-
-        void insertVal(int x)
+        //New Member Entry in Family
+        void insertVal(int x)   
         {
             Node * temp = new Node(x);
             if(isEmpty())
@@ -159,13 +163,11 @@ class BST
             }
         }
 
-
         //Childless Element
         bool isLeaf(Node* now)
         {
             return (now->getLeft()==NULL&& now->getRight()==NULL);
         }
-
 
         //Leaf Nodes ???
         bool isExternal(Node* now)
@@ -188,7 +190,6 @@ class BST
             else
             return false;
         }
-
 
         //Single Parent??
         bool isSingleParent(Node* now)
@@ -229,55 +230,12 @@ class BST
             return LowestElement(now->getRight());
         }
 
-        //Bhara Buzurg of Family
+        //Bhara Buzurg of Family ...
         int Predeccessor(Node* now)
         {
             return LargestElement(now->getLeft());
         }
-
-        void deleteElement(Node* now,int x)
-        {
-            if(now==NULL)
-            return;
-            
-            
-            if(x<now->getData())
-            deleteElement(now->getLeft(),x);
-            
-            
-            else if(x>now->getData())
-            deleteElement(now->getRight(),x);
-
-            else
-            {
-                if(now->getLeft()==NULL && now->getRight()==NULL)
-                {
-                    delete now;
-                    now=NULL;
-                    return;
-                }
-                else if(now->getLeft() == NULL)
-                {
-                    Node* temp=now->getRight();
-                    delete now;
-                    now=temp;
-                    return;
-                }
-                else if(now->getRight() == NULL)
-                {
-                    Node* temp=now->getLeft();
-                    delete now;
-                    now=temp;
-                    return;
-                }
-                Node* temp1;
-                //temp1 = LowestElement(root->getRight());
-                //root->getData() = temp1->getData();
-                deleteElement(now->getRight(),temp1->getData());
-            }
-            return;
-        }
-
+        //Bacha ghr ha k ni .....
         bool doesExist(int x)
         {
             Node * now = root;
@@ -291,55 +249,49 @@ class BST
                 {
                     now = now->getRight();
                 }
-                else{
-                    return true;
-                }
+
+                return true;
+                
             }
             return false;
         }
 
 };
 
-
-
 int main()
 {
+    Node * root = NULL;
     BST s , s1;
     s.insertVal(1);
-    s.insertVal(52);
-    s.insertVal(8);
-    s.insertVal(12);
     s.insertVal(2);
     s.insertVal(3);
     s.insertVal(4);
     
-    s.visitRoot(NULL);
-
-
-    cout<<"First Tree Info : "<<endl;
+    cout<<"-----------------------------------------------------------------------------------------"<<endl;
+    cout<<"\t"<<"First Tree Info : "<<endl;
 
     s.postOrderTraversal();
     s.inOrderTraversal();
     s.preOrderTraversal();
-
-
-
-
+    cout<<"All Elements of Tree through inorder Traversal : ";
+    s.printAll();
+    cout<<endl<<"Value Exist or Not (1 for YES , 0 for NO) : "<<s.doesExist(3)<<endl;
+    //cout<<s.Predeccessor(root)<<endl;
+    
     s1.insertVal(71);
     s1.insertVal(72);
-    s1.insertVal(52);
-    s1.insertVal(54);
-    s1.insertVal(50);
-    s1.insertVal(42);
+    s1.insertVal(73);
     s1.insertVal(74);
 
-
-    cout<<"Second Tree Info : "<<endl;
+    cout<<"-----------------------------------------------------------------------------------------"<<endl;
+    cout<<"\t"<<"Second Tree Info : "<<endl;
 
     s1.postOrderTraversal();
     s1.inOrderTraversal();
     s1.preOrderTraversal();
-
-    
+    cout<<"All Elements of Tree through inorder Traversal : ";
+    s1.printAll();
+    cout<<endl<<"Value Exist or Not (1 for YES , 0 for NO) : "<<s1.doesExist(72)<<endl;
+    cout<<"-----------------------------------------------------------------------------------------"<<endl;
     return 0;
 }
